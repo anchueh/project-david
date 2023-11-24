@@ -77,12 +77,14 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
+    awesome_print (1.9.2)
     base64 (0.2.0)
     bigdecimal (3.1.4)
     bindex (0.8.1)
     bootsnap (1.17.0)
       msgpack (~> 1.2)
     builder (3.2.4)
+    byebug (11.1.3)
     capybara (3.39.2)
       addressable
       matrix
@@ -287,10 +289,13 @@ GEM
 PLATFORMS
   aarch64-linux
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
+  awesome_print
   bootsnap
+  byebug (~> 11.1)
   capybara
   debug
   dotenv-rails

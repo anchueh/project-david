@@ -71,3 +71,6 @@ gem "ruby-openai", "~> 6.2"
 gem 'dotenv-rails', groups: [:development, :test]
 
 gem "httparty", "~> 0.21.0"
+
+gem "byebug", "~> 11.1"
+gem "awesome_print", :require => "ap"

@@ -2,6 +2,22 @@
 
 module OpenAIService
   require 'openai'
+  require 'httparty'
+
+  class RunStatus
+    QUEUED = "queued"
+    IN_PROGRESS = "in_progress"
+    REQUIRES_ACTION = "requires_action"
+    CANCELLING = "cancelling"
+    CANCELLED = "cancelled"
+    FAILED = "failed"
+    COMPLETED = "completed"
+    EXPIRED = "expired"
+
+    def self.running?(status)
+      [QUEUED, IN_PROGRESS, REQUIRES_ACTION, CANCELLING].include?(status)
+    end
+  end
 
   class DavidClient
     def initialize
@@ -27,11 +43,7 @@ module OpenAIService
     end
 
     def create_thread
-      response = @client.threads.create(
-        parameters: {
-          display_name: "test"
-        }
-      )
+      response = @client.threads.create
       response.dig("id")
     end
 
@@ -46,6 +58,7 @@ module OpenAIService
           assistant_id: @assistant_id,
         }
       )
+      puts response
       response.dig("id")
     end
 
@@ -53,8 +66,16 @@ module OpenAIService
       @client.runs.retrieve(thread_id: thread_id, id: run_id)
     end
 
-    def get_messages(thread_id)
-      @client.messages.list(thread_id: thread_id)
+    def get_messages(thread_id, order = "desc", limit = 20, after = nil)
+      response = @client.messages.list(thread_id: thread_id)
+      response.dig("data")
+    end
+
+    def create_message(thread_id, content)
+      @client.messages.create(thread_id: thread_id, parameters: {
+        role: "user",
+        content: content
+      })
     end
 
   end
