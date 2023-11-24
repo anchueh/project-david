@@ -20,6 +20,8 @@ class BotAPI < ApplicationAPI
         requires "hub.verify_token", type: String
         requires "hub.challenge", type: String
       end
+      puts params["hub.verify_token"]
+      puts ENV["VERIFY_TOKEN"]
       if params["hub.mode"] == "subscribe" && params["hub.verify_token"] == ENV["VERIFY_TOKEN"]
         status 200
         body params["hub.challenge"]
