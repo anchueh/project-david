@@ -16,13 +16,13 @@ class BotAPI < ApplicationAPI
   resource :webhook do
     get do
       params do
-        requires :hub_mode, type: String
-        requires :hub_verify_token, type: String
-        requires :hub_challenge, type: String
+        requires "hub.mode", type: String
+        requires "hub.verify_token", type: String
+        requires "hub.challenge", type: String
       end
-      if params[:hub_mode] == "subscribe" && params[:hub_verify_token] == ENV["VERIFY_TOKEN"]
+      if params["hub.mode"] == "subscribe" && params["hub.verify_token"] == ENV["VERIFY_TOKEN"]
         status 200
-        params[:hub_challenge]
+        body params["hub.challenge"]
       else
         status 403
       end
