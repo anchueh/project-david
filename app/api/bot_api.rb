@@ -15,6 +15,8 @@ class BotAPI < ApplicationAPI
 
   resource :webhook do
     get do
+      content_type 'text/plain'
+
       params do
         requires "hub.mode", type: String
         requires "hub.verify_token", type: String
