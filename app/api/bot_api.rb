@@ -20,6 +20,7 @@ class BotAPI < ApplicationAPI
       user_id = ENV["RECIPIENT_IDS"].split(",").first
       bot_service = BotService::Client.new
       bot_service.handle_message(params[:message], user_id)
+      status 200
     end
   end
 
