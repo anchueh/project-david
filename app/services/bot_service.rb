@@ -17,6 +17,7 @@ module BotService
     end
 
     def handle_message(message, user_id)
+      puts "handle_message: #{message} #{user_id}"
       thread = get_thread(user_id)
       thread_id = thread[:thread_id]
       puts "thread_id: #{thread_id}"
