@@ -3,6 +3,8 @@ class BotAPI < ApplicationAPI
   prefix :bot
   format :json
 
+  page_ids = ENV["PAGE_IDS"].split(",")
+
   resource :hello do
     get do
       params do
@@ -43,10 +45,16 @@ class BotAPI < ApplicationAPI
           entry["messaging"].each do |messaging_event|
             sender_id = messaging_event.dig("sender", "id")
             message = messaging_event.dig("message", "text")
+            reaction = messaging_event.dig("reaction")
             is_echo = messaging_event.dig("message", "is_echo")
-            if message && !is_echo
+            if !is_echo && page_ids.include?(sender_id)
               bot_service = BotService::Client.new
-              bot_service.handle_message(message, sender_id)
+              # check if the message is not blank
+              if message
+                bot_service.handle_message(message, sender_id)
+              elsif reaction
+                # handle reaction
+              end
             end
           end
         end
