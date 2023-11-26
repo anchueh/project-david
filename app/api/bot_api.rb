@@ -23,7 +23,7 @@ class BotAPI < ApplicationAPI
       puts params["hub.verify_token"]
       puts ENV["VERIFY_TOKEN"]
       if params["hub.mode"] == "subscribe" && params["hub.verify_token"] == ENV["VERIFY_TOKEN"]
-        content_type :text
+        content_type "text/plain"
         status 200
         puts params["hub.challenge"]
         body params["hub.challenge"]
