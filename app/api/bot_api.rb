@@ -34,7 +34,7 @@ class BotAPI < ApplicationAPI
 
     post do
       # print the formatted request body
-      puts request.body
+      puts "request body: #{request.body.read}"
       user_id = ENV["RECIPIENT_IDS"].split(",").first
       bot_service = BotService::Client.new
       bot_service.handle_message(params[:message], user_id)
