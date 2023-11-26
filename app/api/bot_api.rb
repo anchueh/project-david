@@ -35,10 +35,20 @@ class BotAPI < ApplicationAPI
     post do
       # print the formatted request body
       puts "request body: #{request.body.read}"
-      user_id = ENV["RECIPIENT_IDS"].split(",").first
-      bot_service = BotService::Client.new
-      bot_service.handle_message(params[:message], user_id)
-      status 200
+
+      if body.dig("object") == "page"
+        body["entry"].each do |entry|
+          entry["messaging"].each do |messaging_event|
+            sender_id = messaging_event.dig("sender", "id")
+            message = messaging_event.dig("message", "text")
+            is_echo = messaging_event.dig("message", "is_echo")
+            if message && !is_echo
+              bot_service = BotService::Client.new
+              bot_service.handle_message(message, sender_id)
+            end
+          end
+        end
+      end
     end
   end
 
