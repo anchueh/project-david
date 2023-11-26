@@ -24,14 +24,9 @@ class BotAPI < ApplicationAPI
         requires "hub.challenge", type: String
       end
 
-      puts params["hub.verify_token"]
-      puts ENV["VERIFY_TOKEN"]
-
       if params["hub.mode"] == "subscribe" && params["hub.verify_token"] == ENV["VERIFY_TOKEN"]
         status 200
-        puts params["hub.challenge"]
-        # return hub.challenge without double quotes
-        params["hub.challenge"].to_json.gsub(/\"/, "")
+        params["hub.challenge"]
       else
         status 403
       end
