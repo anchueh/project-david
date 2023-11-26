@@ -26,7 +26,7 @@ class BotAPI < ApplicationAPI
         content_type "text/plain"
         status 200
         puts params["hub.challenge"]
-        body params["hub.challenge"]
+        body params["hub.challenge"].to_s
       else
         status 403
       end
