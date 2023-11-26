@@ -15,17 +15,23 @@ class BotAPI < ApplicationAPI
 
   resource :webhook do
     get do
+      content_type 'text/plain'
+      env['api.format'] = :binary
+
       params do
         requires "hub.mode", type: String
         requires "hub.verify_token", type: String
         requires "hub.challenge", type: String
       end
+
       puts params["hub.verify_token"]
       puts ENV["VERIFY_TOKEN"]
+
       if params["hub.mode"] == "subscribe" && params["hub.verify_token"] == ENV["VERIFY_TOKEN"]
         status 200
         puts params["hub.challenge"]
-        params["hub.challenge"]
+        # return hub.challenge without double quotes
+        params["hub.challenge"].to_json.gsub(/\"/, "")
       else
         status 403
       end
