@@ -36,8 +36,10 @@ class BotAPI < ApplicationAPI
       # print the formatted request body
       puts "request body: #{request.body.read}"
 
-      if body.dig("object") == "page"
-        body["entry"].each do |entry|
+      if request.body.read
+        request.body.rewind
+        json = JSON.parse(request.body.read)
+        json["entry"].each do |entry|
           entry["messaging"].each do |messaging_event|
             sender_id = messaging_event.dig("sender", "id")
             message = messaging_event.dig("message", "text")
