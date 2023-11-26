@@ -6,7 +6,7 @@ class BotAPI < ApplicationAPI
   resource :hello do
     get do
       params do
-        requires :message, type: String
+        requires :message, type: String, allow_blank: false
       end
       bot_service = BotService::Client.new
       bot_service.send_message(params[:message])
@@ -15,8 +15,6 @@ class BotAPI < ApplicationAPI
 
   resource :webhook do
     get do
-      content_type 'text/plain'
-
       params do
         requires "hub.mode", type: String
         requires "hub.verify_token", type: String
@@ -25,7 +23,9 @@ class BotAPI < ApplicationAPI
       puts params["hub.verify_token"]
       puts ENV["VERIFY_TOKEN"]
       if params["hub.mode"] == "subscribe" && params["hub.verify_token"] == ENV["VERIFY_TOKEN"]
+        content_type :text
         status 200
+        puts params["hub.challenge"]
         body params["hub.challenge"]
       else
         status 403

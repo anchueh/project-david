@@ -27,6 +27,7 @@ module OpenAIService
     end
 
     def get_response(prompt)
+      puts "get_response #{prompt}"
       response = @client.chat(
         parameters: {
           model: "gpt-4-1106-preview",
@@ -38,7 +39,7 @@ module OpenAIService
           ]
         },
       )
-      puts @client.assistants.list
+      puts response
       response.dig("choices", 0, "message", "content")
     end
 
