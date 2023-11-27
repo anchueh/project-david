@@ -8,8 +8,7 @@ module BotService
 
     def initialize(
       open_ai_service: OpenAIService::DavidClient.new,
-      messenger_service: MessengerService::Client.new,
-      bot_message_sender_worker: BotMessageSenderWorker.new
+      messenger_service: MessengerService::Client.new
     )
       @open_ai_service = open_ai_service
       @messenger_service = messenger_service
@@ -46,9 +45,7 @@ module BotService
         raise "Latest message is not from assistant"
       end
 
-
-
-      send_bot_message(user_id, latest_message.dig("content", 0, "text", "value"))
+      BotMessageSenderWorker.perform_async(user_id, latest_message.dig("content", 0, "text", "value"))
     end
 
     def watch_run(thread_id, run_id, timeout: 60)
