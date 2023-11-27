@@ -22,30 +22,30 @@ module BotService
 
     def handle_message(message, user_id)
       puts "handle_message: #{message} #{user_id}"
-      @messenger_service.send_action(user_id, "mark_seen")
-
-      thread = get_thread(user_id)
-      thread_id = thread[:thread_id]
-      puts "thread_id: #{thread_id}"
-
-      @open_ai_service.create_message(thread_id, message)
-      puts "message created"
-
-      run_id = @open_ai_service.create_run(thread_id)
-      run = watch_run(thread_id, run_id)
-      puts "run completed"
-      unless run
-        raise "Run failed"
-      end
-
-      messages = @open_ai_service.get_messages(thread_id)
-      latest_message = messages.first
-      puts "latest_message: #{latest_message}"
-      unless latest_message.dig("role").eql?("assistant")
-        raise "Latest message is not from assistant"
-      end
-
-      send_bot_message(user_id, latest_message.dig("content", 0, "text", "value"))
+      # @messenger_service.send_action(user_id, "mark_seen")
+      #
+      # thread = get_thread(user_id)
+      # thread_id = thread[:thread_id]
+      # puts "thread_id: #{thread_id}"
+      #
+      # @open_ai_service.create_message(thread_id, message)
+      # puts "message created"
+      #
+      # run_id = @open_ai_service.create_run(thread_id)
+      # run = watch_run(thread_id, run_id)
+      # puts "run completed"
+      # unless run
+      #   raise "Run failed"
+      # end
+      #
+      # messages = @open_ai_service.get_messages(thread_id)
+      # latest_message = messages.first
+      # puts "latest_message: #{latest_message}"
+      # unless latest_message.dig("role").eql?("assistant")
+      #   raise "Latest message is not from assistant"
+      # end
+      #
+      # send_bot_message(user_id, latest_message.dig("content", 0, "text", "value"))
     end
 
     def send_bot_message(user_id, message)
