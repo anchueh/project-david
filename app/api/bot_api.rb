@@ -35,7 +35,6 @@ class BotAPI < ApplicationAPI
     end
 
     post do
-      # print the formatted request body
       puts "request body: #{request.body.read}"
 
       if request.body.read
@@ -49,7 +48,6 @@ class BotAPI < ApplicationAPI
             is_echo = messaging_event.dig("message", "is_echo")
             if !is_echo && !page_ids.include?(sender_id)
               bot_service = BotService::Client.new
-              # check if the message is not blank
               if message
                 bot_service.handle_message(message, sender_id)
               elsif reaction
