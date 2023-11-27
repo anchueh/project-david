@@ -2,6 +2,10 @@
 
 module BotService
   class Client
+
+    SENTENCE_REGEX = /(?<!\w\.\w.)(?<![A-Z][a.z]\.)(?<=\.|\?|\!|\n|(?<=\s|^)(?<!\s|^)(?<!\s|^))\s*/.freeze
+    DEFAULT_TYPING_SPEED = 400 # characters per minute
+
     def initialize(
       open_ai_service: OpenAIService::DavidClient.new,
       messenger_service: MessengerService::Client.new
@@ -44,8 +48,32 @@ module BotService
 
     def send_bot_message(user_id, message)
       puts "send_bot_message: #{user_id} #{message}"
-      @messenger_service.send_message(user_id, message)
-      puts "message sent"
+      sentences = message.split(SENTENCE_REGEX)
+
+      sentences.each do |sentence|
+        @messenger_service.send_action(user_id, "typing_on")
+        duration = get_typing_duration(sentence, DEFAULT_TYPING_SPEED)
+        sleep(duration / 1000.0) # Convert milliseconds to seconds
+        @messenger_service.send_message(user_id, sentence)
+        puts "Sent: #{sentence}"
+      end
+
+      puts "All messages sent"
+    end
+
+    private
+
+    def get_typing_duration(text, typing_speed)
+      characters = text.length
+      characters_per_second = typing_speed / 60.0
+      duration_in_seconds = characters / characters_per_second
+      duration_in_milliseconds = duration_in_seconds * 1000
+
+      # Multiply the duration by the random factor
+      random_factor = 0.8 + rand * (1.2 - 0.8)
+      adjusted_duration = duration_in_milliseconds * random_factor
+
+      adjusted_duration
     end
 
     def watch_run(thread_id, run_id, timeout: 60)
