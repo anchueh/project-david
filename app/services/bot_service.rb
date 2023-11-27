@@ -22,6 +22,8 @@ module BotService
 
     def handle_message(message, user_id)
       puts "handle_message: #{message} #{user_id}"
+      @messenger_service.send_action(user_id, "mark_seen")
+
       thread = get_thread(user_id)
       thread_id = thread[:thread_id]
       puts "thread_id: #{thread_id}"
