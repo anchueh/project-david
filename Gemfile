@@ -74,3 +74,5 @@ gem "httparty", "~> 0.21.0"
 
 gem "byebug", "~> 11.1"
 gem "awesome_print", :require => "ap"
+
+gem "sidekiq", "~> 7.2"
