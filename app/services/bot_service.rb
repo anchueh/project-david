@@ -45,6 +45,7 @@ module BotService
         raise "Latest message is not from assistant"
       end
 
+      puts "Sending message to user"
       BotMessageSenderWorker.perform_async(user_id, latest_message.dig("content", 0, "text", "value"))
     end
 
