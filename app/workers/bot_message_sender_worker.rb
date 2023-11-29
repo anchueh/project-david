@@ -3,8 +3,8 @@
 class BotMessageSenderWorker
   include Sidekiq::Worker
 
-  def initialize(bot_service: BotService::Client.new)
-    @bot_service = bot_service
+  def initialize(messenger_service: MessengerService::Client.new)
+    @messenger_service = messenger_service
   end
 
   def perform(user_id, message)
