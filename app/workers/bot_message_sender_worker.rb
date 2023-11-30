@@ -6,11 +6,6 @@ class BotMessageSenderWorker
   SENTENCE_REGEX = /(?<!\w\.\w.)(?<![A-Z][a.z]\.)(?<=\.|\?|\!|\n|(?<=\s|^)(?<!\s|^)(?<!\s|^))\s*/.freeze
   DEFAULT_TYPING_SPEED = 400 # characters per minute
 
-  def initialize(user_id:, message:)
-    @user_id = user_id
-    @message = message
-  end
-
   def perform(user_id, message)
     puts "send_bot_message: #{user_id} #{message}"
     sentences = message.split(SENTENCE_REGEX)

@@ -9,6 +9,7 @@ module MessengerServices
     attr_reader :data
 
     def initialize(user_id:, action:)
+      super
       @user_id = user_id
       @action = action
       @page_access_token = ENV['PAGE_ACCESS_TOKEN']
