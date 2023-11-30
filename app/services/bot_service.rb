@@ -18,6 +18,7 @@ module BotService
       puts "message created"
 
       run_id = create_run(thread_id: thread_id, assistant_id: @assistant_id)
+      puts "run created #{run_id}"
       run = watch_run(thread_id: thread_id, run_id: run_id)
       puts "run completed"
       unless run
@@ -47,7 +48,7 @@ module BotService
         run_status = retrieve_run_status(thread_id: thread_id, run_id: run_id)
       end
 
-      if (run_status != OpenAIService::RunStatus::COMPLETED)
+      if (run_status != OpenAIServices::RunStatus::COMPLETED)
         raise "Run failed"
       end
 
