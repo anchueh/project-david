@@ -2,34 +2,29 @@
 
 module BotService
   class Client
-
-    def initialize(
-      open_ai_service: OpenAIService::DavidClient.new,
-      messenger_service: MessengerService::Client.new
-    )
-      @open_ai_service = open_ai_service
-      @messenger_service = messenger_service
+    def initialize
+      @assistant_id = ENV["OPENAI_ASSISTANT_ID"]
     end
 
-    def handle_message(message, user_id)
+    def handle_message(message:, user_id:)
       puts "handle_message: #{message} #{user_id}"
-      send_mark_seen_action(user_id)
+      send_mark_seen_action(user_id: user_id)
 
-      thread = get_thread(user_id)
+      thread = get_thread(user_id: user_id)
       thread_id = thread[:thread_id]
       puts "thread_id: #{thread_id}"
 
-      @open_ai_service.create_message(thread_id, message)
+      create_message(thread_id: thread_id, message: message)
       puts "message created"
 
-      run_id = @open_ai_service.create_run(thread_id)
-      run = watch_run(thread_id, run_id)
+      run_id = create_run(thread_id: thread_id, assistant_id: @assistant_id)
+      run = watch_run(thread_id: thread_id, run_id: run_id)
       puts "run completed"
       unless run
         raise "Run failed"
       end
 
-      messages = @open_ai_service.get_messages(thread_id)
+      messages = get_messages(thread_id: thread_id)
       latest_message = messages.first
       puts "latest_message: #{latest_message}"
       unless latest_message.dig("role").eql?("assistant")
@@ -40,17 +35,17 @@ module BotService
       BotMessageSenderWorker.perform_async(user_id, latest_message.dig("content", 0, "text", "value"))
     end
 
-    def watch_run(thread_id, run_id, timeout: 60)
-      run = @open_ai_service.retrieve_run(thread_id, run_id)
+    def watch_run(thread_id:, run_id:, timeout: 60)
+      run = retrieve_run(thread_id: thread_id, run_id: run_id)
       start_time = Time.now
       run_status = run.dig("status")
 
-      while OpenAIService::RunStatus.running?(run_status)
+      while OpenAIServices::RunStatus.running?(run_status)
         if Time.now - start_time > timeout
           raise "Run timed out"
         end
         sleep(1)
-        run = @open_ai_service.retrieve_run(thread_id, run_id)
+        run = retrieve_run(thread_id: thread_id, run_id: run_id)
         run_status = run.dig("status")
       end
 
@@ -61,7 +56,7 @@ module BotService
       run
     end
 
-    def get_thread(user_id)
+    def get_thread(user_id:)
       user_thread = UserThread.find_by(user_id: user_id)
       unless user_thread
         create_thread_service = OpenAIServices::CreateThread.new
@@ -72,9 +67,33 @@ module BotService
       user_thread
     end
 
-    def send_mark_seen_action(user_id)
+    def send_mark_seen_action(user_id:)
       send_mark_seen_action_service = MessengerServices::SendAction.new(user_id: user_id, action: "mark_seen")
       send_mark_seen_action_service.call
+    end
+
+    def create_message(thread_id:, message:)
+      create_message_service = OpenAIServices::CreateMessage.new(thread_id: thread_id, message: message)
+      create_message_service.call
+      create_message_service.message_id
+    end
+
+    def create_run(thread_id:, assistant_id:)
+      create_run_service = OpenAIServices::CreateRun.new(thread_id: thread_id, assistant_id: assistant_id)
+      create_run_service.call
+      create_run_service.run_id
+    end
+
+    def retrieve_run(thread_id:, run_id:)
+      retrieve_run_service = OpenAIServices::RetrieveRun.new(thread_id: thread_id, run_id: run_id)
+      retrieve_run_service.call
+      retrieve_run_service.run
+    end
+
+    def get_messages(thread_id:, order: "desc", limit: 20, after: nil)
+      get_messages_service = OpenAIServices::GetMessages.new(thread_id: thread_id)
+      get_messages_service.call
+      get_messages_service.data
     end
   end
 end

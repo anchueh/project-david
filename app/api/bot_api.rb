@@ -50,7 +50,7 @@ class BotAPI < ApplicationAPI
             if !is_echo && !page_ids.include?(sender_id)
               bot_service = BotService::Client.new
               if message
-                bot_service.handle_message(message, sender_id)
+                bot_service.handle_message(message: message, user_id: sender_id)
               elsif reaction
                 # handle reaction
               end
