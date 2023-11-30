@@ -6,7 +6,7 @@ require 'json'
 
 module MessengerServices
   class SendAction < ::ServiceBase
-    attr_reader :data
+    attr_reader :user_id, :action, :page_access_token, :uri, :response
 
     def initialize(user_id:, action:)
       super
