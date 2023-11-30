@@ -3,6 +3,9 @@
 class BotMessageSenderWorker
   include Sidekiq::Worker
 
+  SENTENCE_REGEX = /(?<!\w\.\w.)(?<![A-Z][a.z]\.)(?<=\.|\?|\!|\n|(?<=\s|^)(?<!\s|^)(?<!\s|^))\s*/.freeze
+  DEFAULT_TYPING_SPEED = 400 # characters per minute
+
   def initialize(messenger_service: MessengerService::Client.new)
     @messenger_service = messenger_service
   end
