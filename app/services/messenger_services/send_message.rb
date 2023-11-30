@@ -26,31 +26,31 @@ module MessengerServices
     end
 
     def validate
-      add_error 'User ID is blank' if user_id.blank?
-      add_error 'Message is blank' if message.blank?
+      add_error 'User ID is blank' if @user_id.blank?
+      add_error 'Message is blank' if @message.blank?
     end
 
     def send_message
-      http = Net::HTTP.new(uri.host, uri.port)
+      http = Net::HTTP.new(@uri.host, @uri.port)
       http.use_ssl = true
-      request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
+      request = Net::HTTP::Post.new(@uri.request_uri, 'Content-Type' => 'application/json')
       request.body = {
         recipient: {
-          id: user_id
+          id: @user_id
         },
         message: {
-          text: message
+          text: @message
         }
       }.to_json
       @response = http.request(request)
-      puts "response: #{response.body}"
+      puts "response: #{@response.body}"
     rescue StandardError => e
       add_error e.message
     end
 
     def handle_response
-      unless response.is_a?(Net::HTTPSuccess)
-        add_error "Failed to send message: #{response.message}"
+      unless @response.is_a?(Net::HTTPSuccess)
+        add_error "Failed to send message: #{@response.message}"
       end
     end
   end
