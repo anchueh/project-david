@@ -48,9 +48,9 @@ class BotAPI < ApplicationAPI
             reaction = messaging_event.dig("reaction")
             is_echo = messaging_event.dig("message", "is_echo")
             if !is_echo && !page_ids.include?(sender_id)
-              bot_service = BotService::Client.new
               if message
-                bot_service.handle_message(message: message, user_id: sender_id)
+                handle_message_service = BotServices::HandleMessage.new(user_id: sender_id, message: message)
+                handle_message_service.call
               elsif reaction
                 # handle reaction
               end
