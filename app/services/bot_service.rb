@@ -36,17 +36,15 @@ module BotService
     end
 
     def watch_run(thread_id:, run_id:, timeout: 60)
-      run = retrieve_run(thread_id: thread_id, run_id: run_id)
+      run_status = retrieve_run_status(thread_id: thread_id, run_id: run_id)
       start_time = Time.now
-      run_status = run.dig("status")
 
       while OpenAIServices::RunStatus.running?(run_status)
         if Time.now - start_time > timeout
           raise "Run timed out"
         end
         sleep(1)
-        run = retrieve_run(thread_id: thread_id, run_id: run_id)
-        run_status = run.dig("status")
+        run_status = retrieve_run_status(thread_id: thread_id, run_id: run_id)
       end
 
       if (run_status != OpenAIService::RunStatus::COMPLETED)
@@ -84,10 +82,10 @@ module BotService
       create_run_service.run_id
     end
 
-    def retrieve_run(thread_id:, run_id:)
+    def retrieve_run_status(thread_id:, run_id:)
       retrieve_run_service = OpenAIServices::RetrieveRun.new(thread_id: thread_id, run_id: run_id)
       retrieve_run_service.call
-      retrieve_run_service.run
+      retrieve_run_service.status
     end
 
     def get_messages(thread_id:, order: "desc", limit: 20, after: nil)
