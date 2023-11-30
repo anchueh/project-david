@@ -13,7 +13,7 @@ module BotService
 
     def handle_message(message, user_id)
       puts "handle_message: #{message} #{user_id}"
-      @messenger_service.send_action(user_id, "mark_seen")
+      send_mark_seen_action(user_id)
 
       thread = get_thread(user_id)
       thread_id = thread[:thread_id]
@@ -64,10 +64,17 @@ module BotService
     def get_thread(user_id)
       user_thread = UserThread.find_by(user_id: user_id)
       unless user_thread
-        thread_id = @open_ai_service.create_thread
+        create_thread_service = OpenAIServices::CreateThread.new
+        create_thread_service.call
+        thread_id = create_thread_service.thread_id
         user_thread = UserThread.create(user_id: user_id, thread_id: thread_id)
       end
       user_thread
+    end
+
+    def send_mark_seen_action(user_id)
+      send_mark_seen_action_service = MessengerServices::SendAction.new(user_id: user_id, action: "mark_seen")
+      send_mark_seen_action_service.call
     end
   end
 end

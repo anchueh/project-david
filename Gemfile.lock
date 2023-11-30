@@ -306,6 +306,7 @@ DEPENDENCIES
   capybara
   debug
   dotenv-rails
+  faraday (~> 2.7)
   grape (~> 2.0)
   httparty (~> 0.21.0)
   importmap-rails

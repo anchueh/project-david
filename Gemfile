@@ -76,3 +76,5 @@ gem "byebug", "~> 11.1"
 gem "awesome_print", :require => "ap"
 
 gem "sidekiq", "~> 7.2"
+
+gem "faraday", "~> 2.7"

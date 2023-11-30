@@ -26,30 +26,9 @@ module OpenAIService
       @client = OpenAI::Client.new(access_token: @access_token)
     end
 
-    def get_response(prompt)
-      puts "get_response #{prompt}"
-      response = @client.chat(
-        parameters: {
-          model: "gpt-4-1106-preview",
-          messages: [
-            {
-              role: "user",
-              content: prompt
-            }
-          ]
-        },
-      )
-      puts response
-      response.dig("choices", 0, "message", "content")
-    end
-
     def create_thread
       response = @client.threads.create
       response.dig("id")
-    end
-
-    def retrieve_thread(id)
-      @client.threads.retrieve(id: id)
     end
 
     def create_run(thread_id)
