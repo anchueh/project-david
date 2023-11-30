@@ -21,6 +21,11 @@ module BotServices
       add_error e.message
     end
 
+    def validate
+      add_error 'Message is blank' if @message.blank?
+      add_error 'User ID is blank' if @user_id.blank?
+    end
+
     def handle_message(message:, user_id:)
       puts "handle_message: #{message} #{user_id}"
       send_mark_seen_action(user_id: user_id)
