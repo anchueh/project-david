@@ -52,7 +52,7 @@ module BotService
         raise "Run failed"
       end
 
-      run
+      run_status
     end
 
     def get_thread(user_id:)
