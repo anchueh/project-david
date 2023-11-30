@@ -6,19 +6,23 @@ class BotMessageSenderWorker
   SENTENCE_REGEX = /(?<!\w\.\w.)(?<![A-Z][a.z]\.)(?<=\.|\?|\!|\n|(?<=\s|^)(?<!\s|^)(?<!\s|^))\s*/.freeze
   DEFAULT_TYPING_SPEED = 400 # characters per minute
 
-  def initialize(messenger_service: MessengerService::Client.new)
-    @messenger_service = messenger_service
+  def initialize(user_id:, message:)
+    @user_id = user_id
+    @message = message
   end
 
   def perform(user_id, message)
     puts "send_bot_message: #{user_id} #{message}"
     sentences = message.split(SENTENCE_REGEX)
 
+    send_action_service = MessengerServices::SendAction.new(user_id: user_id, action: "typing_on")
+
     sentences.each do |sentence|
-      @messenger_service.send_action(user_id, "typing_on")
+      send_action_service.call
       duration = get_typing_duration(sentence, DEFAULT_TYPING_SPEED)
       sleep(duration / 1000.0)
-      @messenger_service.send_message(user_id, sentence)
+      send_message_service = MessengerServices::SendMessage.new(user_id: user_id, message: sentence)
+      send_message_service.call
       puts "Sent: #{sentence}"
     end
 
@@ -31,7 +35,6 @@ class BotMessageSenderWorker
     duration_in_seconds = characters / characters_per_second
     duration_in_milliseconds = duration_in_seconds * 1000
 
-    # Multiply the duration by the random factor
     random_factor = 0.8 + rand * (1.2 - 0.8)
     adjusted_duration = duration_in_milliseconds * random_factor
 

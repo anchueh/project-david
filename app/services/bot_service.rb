@@ -11,12 +11,6 @@ module BotService
       @messenger_service = messenger_service
     end
 
-    def send_message(message)
-      response = @open_ai_service.get_response(message)
-      @messenger_service.send_message("6034297423330611", response)
-      { message: response }
-    end
-
     def handle_message(message, user_id)
       puts "handle_message: #{message} #{user_id}"
       @messenger_service.send_action(user_id, "mark_seen")
