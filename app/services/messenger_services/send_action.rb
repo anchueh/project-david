@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'uri'
-require 'json'
-
 module MessengerServices
   class SendAction < ::ServiceBase
     attr_reader :user_id, :action, :page_access_token, :uri, :response
