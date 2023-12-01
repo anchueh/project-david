@@ -5,16 +5,6 @@ class BotAPI < ApplicationAPI
 
   page_ids = ENV["PAGE_IDS"].split(",")
 
-  resource :hello do
-    get do
-      params do
-        requires :message, type: String, allow_blank: false
-      end
-      bot_service = BotService::Client.new
-      bot_service.send_message(params[:message])
-    end
-  end
-
   resource :webhook do
     get do
       content_type 'text/plain'
