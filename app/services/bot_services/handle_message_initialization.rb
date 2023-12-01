@@ -42,6 +42,17 @@ module BotServices
       puts "run created #{@run_id}"
     end
 
+    def get_thread(user_id:)
+      user_thread = UserThread.find_by(user_id: user_id)
+      unless user_thread
+        create_thread_service = OpenAIServices::CreateThread.new
+        create_thread_service.call
+        thread_id = create_thread_service.thread_id
+        user_thread = UserThread.create(user_id: user_id, thread_id: thread_id)
+      end
+      user_thread
+    end
+
     def send_mark_seen_action(user_id:)
       send_mark_seen_action_service = MessengerServices::SendAction.new(user_id: user_id, action: "mark_seen")
       send_mark_seen_action_service.call
