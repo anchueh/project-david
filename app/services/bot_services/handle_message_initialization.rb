@@ -28,18 +28,13 @@ module BotServices
     end
 
     def handle_initialization
-      puts "Initializing message handling for: #{message} #{user_id}"
       send_mark_seen_action(user_id: user_id)
 
       thread = get_thread(user_id: user_id)
       @thread_id = thread[:thread_id]
-      puts "thread_id: #{@thread_id}"
 
       create_message(thread_id: @thread_id, message: message)
-      puts "message created"
-
       @run_id = create_run(thread_id: @thread_id, assistant_id: ENV['OPENAI_ASSISTANT_ID'])
-      puts "run created #{@run_id}"
     end
 
     def get_thread(user_id:)

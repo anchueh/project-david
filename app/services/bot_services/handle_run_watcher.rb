@@ -39,10 +39,8 @@ module BotServices
     def handle_run_completion
       messages = get_messages(thread_id: @thread_id)
       latest_message = messages.first
-      puts "latest_message: #{latest_message}"
       raise "Latest message is not from assistant" unless latest_message.dig("role").eql?("assistant")
 
-      puts "Sending message to user"
       BotMessageSenderWorker.perform_async(@user_id, latest_message.dig("content", 0, "text", "value"))
     end
 
