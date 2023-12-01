@@ -50,7 +50,7 @@ module MessengerServices
 
     def handle_response
       unless @response.is_a?(Net::HTTPSuccess)
-        add_error "Failed to send message: #{@response.message}"
+        add_error "Failed to send message"
       end
     end
   end

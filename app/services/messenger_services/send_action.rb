@@ -48,7 +48,7 @@ module MessengerServices
 
     def handle_response
       unless @response.is_a?(Net::HTTPSuccess)
-        add_error "Failed to send action: #{@response.message}"
+        add_error "Failed to send action"
       end
     end
   end
