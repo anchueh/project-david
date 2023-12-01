@@ -30,16 +30,20 @@ module MessengerServices
       http = Net::HTTP.new(@uri.host, @uri.port)
       http.use_ssl = true
       request = Net::HTTP::Post.new(@uri.request_uri, 'Content-Type' => 'application/json')
-      request.body = {
-        recipient: {
-          id: @user_id
-        },
-        sender_action: @action
-      }.to_json
+      request.body = request_body.to_json
       @response = http.request(request)
       puts "response: #{@response.body}"
     rescue StandardError => e
       add_error e.message
+    end
+
+    def request_body
+      {
+        recipient: {
+          id: @user_id
+        },
+        sender_action: @action
+      }
     end
 
     def handle_response
