@@ -2,7 +2,7 @@
 
 module OpenAIServices
   class CreateThread < ::ServiceBase
-    attr_reader :access_token, :client, :response, :thread_id
+    attr_reader :client, :response, :thread_id
 
     # Initializes a new instance of the CreateThread service.
     #
@@ -30,8 +30,7 @@ module OpenAIServices
     #   method to perform the actual action of thread creation and obtain the `:thread_id`.
     def initialize
       super
-      @access_token = ENV["OPENAI_API_KEY"]
-      @client = OpenAI::Client.new(access_token: @access_token)
+      @client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     end
 
     def call

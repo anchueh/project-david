@@ -2,7 +2,7 @@
 
 module OpenAIServices
   class CreateRun < ::ServiceBase
-    attr_reader :access_token, :client, :thread_id, :assistant_id, :response, :run_id
+    attr_reader :client, :thread_id, :assistant_id, :response, :run_id
 
     # Initializes a new instance of the CreateRun service.
     #
@@ -32,8 +32,7 @@ module OpenAIServices
     #   perform the actual action and obtain the `:run_id`.
     def initialize(thread_id:, assistant_id:)
       super
-      @access_token = ENV["OPENAI_API_KEY"]
-      @client = OpenAI::Client.new(access_token: @access_token)
+      @client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
       @thread_id = thread_id
       @assistant_id = assistant_id
     end

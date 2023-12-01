@@ -2,7 +2,7 @@
 
 module OpenAIServices
   class CreateMessage < ::ServiceBase
-    attr_reader :access_token, :client, :thread_id, :message, :response, :message_id
+    attr_reader :client, :thread_id, :message, :response, :message_id
 
     # Initializes a new instance of the CreateMessage service.
     #
@@ -32,8 +32,7 @@ module OpenAIServices
     #   perform the actual action and obtain the `:message_id`.
     def initialize(thread_id:, message:)
       super
-      @access_token = ENV["OPENAI_API_KEY"]
-      @client = OpenAI::Client.new(access_token: @access_token)
+      @client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
       @thread_id = thread_id
       @message = message
     end

@@ -2,7 +2,7 @@
 
 module OpenAIServices
   class GetMessages < ::ServiceBase
-    attr_reader :access_token, :client, :thread_id, :response, :data
+    attr_reader :client, :thread_id, :response, :data
 
     # Initializes a new instance of the GetMessages service.
     #
@@ -32,8 +32,7 @@ module OpenAIServices
     #   perform the actual action and access the retrieved messages through the `data` attribute.
     def initialize(thread_id:)
       super
-      @access_token = ENV["OPENAI_API_KEY"]
-      @client = OpenAI::Client.new(access_token: @access_token)
+      @client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
       @thread_id = thread_id
     end
 

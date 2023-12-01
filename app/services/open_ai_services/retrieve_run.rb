@@ -2,7 +2,7 @@
 
 module OpenAIServices
   class RetrieveRun < ::ServiceBase
-    attr_reader :access_token, :client, :thread_id, :run_id, :response, :status
+    attr_reader :client, :thread_id, :run_id, :response, :status
 
     # Initializes a new instance of the RetrieveRun service.
     #
@@ -31,9 +31,8 @@ module OpenAIServices
     #   Returns an instance of RetrieveRun. This instance needs to be used with the `call` method to
     #   perform the actual action and obtain the `:status`.
     def initialize(thread_id:, run_id:)
-      super()
-      @access_token = ENV["OPENAI_API_KEY"]
-      @client = OpenAI::Client.new(access_token: @access_token)
+      super
+      @client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
       @thread_id = thread_id
       @run_id = run_id
     end
