@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module OpenAIServices
-  require 'openai'
-
   class CreateThread < ::ServiceBase
     attr_reader :access_token, :client, :response, :thread_id
 

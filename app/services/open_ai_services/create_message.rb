@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module OpenAIServices
-  require 'openai'
-
   class CreateMessage < ::ServiceBase
     attr_reader :access_token, :client, :thread_id, :message, :response, :message_id
 

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module OpenAIServices
-  require 'openai'
-
   class RetrieveRun < ::ServiceBase
     attr_reader :access_token, :client, :thread_id, :run_id, :response, :status
 
