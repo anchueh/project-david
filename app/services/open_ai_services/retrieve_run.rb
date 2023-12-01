@@ -4,6 +4,32 @@ module OpenAIServices
   class RetrieveRun < ::ServiceBase
     attr_reader :access_token, :client, :thread_id, :run_id, :response, :status
 
+    # Initializes a new instance of the RetrieveRun service.
+    #
+    # This method sets up the necessary attributes for interacting with the OpenAI API,
+    # including configuring the OpenAI client with the API key, and initializing thread_id
+    # and run_id instance variables. After the service call (using the `call` method),
+    # the `:status` is extracted from the response and set as an instance variable.
+    #
+    # @param thread_id [String] The unique identifier of the thread associated with the run.
+    # @param run_id [String] The identifier of the specific run to be retrieved.
+    #
+    # @example
+    #   retrieve_run_service = OpenAIServices::RetrieveRun.new(thread_id: "12345", run_id: "67890")
+    #   retrieve_run_service.call
+    #   puts retrieve_run_service.status
+    #
+    # @note
+    #   This method requires the OPENAI_API_KEY environment variable to be set with a valid OpenAI API key.
+    #   The `thread_id` and `run_id` parameters are required and cannot be blank. The `:status` is
+    #   available only after successfully executing the `call` method.
+    #
+    # @raise [ArgumentError]
+    #   If the `thread_id` or `run_id` is not provided or is blank, an ArgumentError will be raised.
+    #
+    # @return [OpenAIServices::RetrieveRun]
+    #   Returns an instance of RetrieveRun. This instance needs to be used with the `call` method to
+    #   perform the actual action and obtain the `:status`.
     def initialize(thread_id:, run_id:)
       super()
       @access_token = ENV["OPENAI_API_KEY"]

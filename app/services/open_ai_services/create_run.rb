@@ -4,6 +4,32 @@ module OpenAIServices
   class CreateRun < ::ServiceBase
     attr_reader :access_token, :client, :thread_id, :assistant_id, :response, :run_id
 
+    # Initializes a new instance of the CreateRun service.
+    #
+    # This method sets up the necessary attributes for interacting with the OpenAI API,
+    # including configuring the OpenAI client with the API key and initializing thread_id
+    # and assistant_id instance variables. After the service call (using the `call` method),
+    # the `:run_id` is extracted from the response and set as an instance variable.
+    #
+    # @param thread_id [String] The unique identifier of the thread for which the run is being created.
+    # @param assistant_id [String] The identifier of the assistant to be used for the run.
+    #
+    # @example
+    #   create_run_service = OpenAIServices::CreateRun.new(thread_id: "12345", assistant_id: "assistant-123")
+    #   create_run_service.call
+    #   puts create_run_service.run_id
+    #
+    # @note
+    #   This method requires the OPENAI_API_KEY environment variable to be set with a valid OpenAI API key.
+    #   The `thread_id` and `assistant_id` parameters are required and cannot be blank. The `:run_id` is
+    #   available only after successfully executing the `call` method.
+    #
+    # @raise [ArgumentError]
+    #   If the `thread_id` or `assistant_id` is not provided or is blank, an ArgumentError will be raised.
+    #
+    # @return [OpenAIServices::CreateRun]
+    #   Returns an instance of CreateRun. This instance needs to be used with the `call` method to
+    #   perform the actual action and obtain the `:run_id`.
     def initialize(thread_id:, assistant_id:)
       super
       @access_token = ENV["OPENAI_API_KEY"]
