@@ -27,23 +27,18 @@ class BotAPI < ApplicationAPI
     post do
       puts "request body: #{request.body.read}"
 
-      if request.body.read
-        request.body.rewind
-        json = JSON.parse(request.body.read)
-
-        json["entry"].each do |entry|
-          entry["messaging"].each do |messaging_event|
-            sender_id = messaging_event.dig("sender", "id")
-            message = messaging_event.dig("message", "text")
-            reaction = messaging_event.dig("reaction")
-            is_echo = messaging_event.dig("message", "is_echo")
-            if !is_echo && !page_ids.include?(sender_id)
-              if message
-                handle_message_service = BotServices::HandleMessage.new(user_id: sender_id, message: message)
-                handle_message_service.call
-              elsif reaction
-                # handle reaction
-              end
+      params["entry"].each do |entry|
+        entry["messaging"].each do |messaging_event|
+          sender_id = messaging_event.dig("sender", "id")
+          message = messaging_event.dig("message", "text")
+          reaction = messaging_event.dig("reaction")
+          is_echo = messaging_event.dig("message", "is_echo")
+          if !is_echo && !page_ids.include?(sender_id)
+            if message
+              handle_message_service = BotServices::HandleMessage.new(user_id: sender_id, message: message)
+              handle_message_service.call
+            elsif reaction
+              # handle reaction
             end
           end
         end
