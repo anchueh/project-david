@@ -25,8 +25,6 @@ class BotAPI < ApplicationAPI
     end
 
     post do
-      puts "request body: #{request.body.read}"
-
       params["entry"].each do |entry|
         entry["messaging"].each do |messaging_event|
           sender_id = messaging_event.dig("sender", "id")

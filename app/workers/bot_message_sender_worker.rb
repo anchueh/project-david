@@ -7,9 +7,7 @@ class BotMessageSenderWorker
   DEFAULT_TYPING_SPEED = 400 # characters per minute
 
   def perform(user_id, message)
-    puts "send_bot_message: #{user_id} #{message}"
     sentences = message.split(SENTENCE_REGEX)
-
     send_action_service = MessengerServices::SendAction.new(user_id: user_id, action: "typing_on")
 
     sentences.each do |sentence|
@@ -18,10 +16,7 @@ class BotMessageSenderWorker
       sleep(duration / 1000.0)
       send_message_service = MessengerServices::SendMessage.new(user_id: user_id, message: sentence)
       send_message_service.call
-      puts "Sent: #{sentence}"
     end
-
-    puts "All messages sent"
   end
 
   private def get_typing_duration(text, typing_speed)

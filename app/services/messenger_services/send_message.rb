@@ -32,7 +32,6 @@ module MessengerServices
       request = Net::HTTP::Post.new(@uri.request_uri, 'Content-Type' => 'application/json')
       request.body = request_body.to_json
       @response = http.request(request)
-      puts "response: #{@response.body}"
     rescue StandardError => e
       add_error e.message
     end
