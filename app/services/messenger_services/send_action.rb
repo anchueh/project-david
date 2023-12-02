@@ -22,8 +22,8 @@ module MessengerServices
     end
 
     def validate
-      add_error 'User ID is blank' if @user_id.blank?
-      add_error 'Action is blank' if @action.blank?
+      add_error I18n.t('messenger_services.user_id_is_blank') if @user_id.blank?
+      add_error I18n.t('messenger_services.action_is_blank') if @action.blank?
     end
 
     def send_action
@@ -47,7 +47,7 @@ module MessengerServices
 
     def handle_response
       unless @response.is_a?(Net::HTTPSuccess)
-        add_error "Failed to send action"
+        add_error I18n.t('messenger_services.send_action_failed')
       end
     end
   end

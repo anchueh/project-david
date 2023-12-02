@@ -10,11 +10,20 @@ module BotServices
     end
 
     def call
+      validate
+      return self unless success?
+
       watch_run
       handle_run_completion
       self
     rescue StandardError => e
       add_error e.message
+    end
+
+    def validate
+      add_error I18n.t("bot_services.thread_id_is_blank") if @thread_id.blank?
+      add_error I18n.t("bot_services.run_id_is_blank") if @run_id.blank?
+      add_error I18n.t("bot_services.user_id_is_blank") if @user_id.blank?
     end
 
     private
@@ -25,7 +34,7 @@ module BotServices
 
       while OpenAIServices::RunStatus.running?(run_status)
         if Time.now - start_time > timeout
-          raise "Run timed out"
+          raise I18n.t("bot_services.run_watcher_timeout")
         end
         sleep(1)
         run_status = retrieve_run_status(thread_id: @thread_id, run_id: @run_id)
@@ -39,7 +48,7 @@ module BotServices
     def handle_run_completion
       messages = get_messages(thread_id: @thread_id)
       latest_message = messages.first
-      raise "Latest message is not from assistant" unless latest_message.dig("role").eql?("assistant")
+      raise I18n.t("bot_services.latest_message_is_not_from_assistant") unless latest_message.dig("role").eql?("assistant")
 
       BotMessageSenderWorker.perform_async(@user_id, latest_message.dig("content", 0, "text", "value"))
     end

@@ -22,8 +22,8 @@ module MessengerServices
     end
 
     def validate
-      add_error 'User ID is blank' if @user_id.blank?
-      add_error 'Message is blank' if @message.blank?
+      add_error I18n.t('messenger_services.user_id_is_blank') if @user_id.blank?
+      add_error I18n.t('messenger_services.message_is_blank') if @message.blank?
     end
 
     def send_message
@@ -49,7 +49,7 @@ module MessengerServices
 
     def handle_response
       unless @response.is_a?(Net::HTTPSuccess)
-        add_error "Failed to send message"
+        add_error I18n.t('messenger_services.send_message_failed')
       end
     end
   end

@@ -29,3 +29,24 @@
 
 en:
   hello: "Hello world"
+
+  bot_services:
+    message_is_blank: "Message is blank"
+    user_id_is_blank: "User ID is blank"
+    thread_id_is_blank: "Thread ID is blank"
+    run_id_is_blank: "Run ID is blank"
+    run_watcher_timeout: "Run watcher timeout"
+    latest_message_is_not_from_assistant: "Latest message is not from assistant"
+
+  messenger_services:
+    user_id_is_blank: "User ID is blank"
+    action_is_blank: "Action is blank"
+    message_is_blank: "Message is blank"
+    send_action_failed: "Send action failed"
+    send_message_failed: "Send message failed"
+
+  open_ai_services:
+    thread_id_is_blank: "Thread ID is blank"
+    message_is_blank: "Message is blank"
+    assistant_id_is_blank: "Assistant ID is blank"
+    run_id_is_blank: "Run ID is blank"

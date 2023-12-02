@@ -49,8 +49,8 @@ module OpenAIServices
     end
 
     def validate
-      add_error 'Thread ID is blank' if @thread_id.blank?
-      add_error 'Message is blank' if @message.blank?
+      add_error I18n.t("open_ai_services.thread_id_is_blank") if @thread_id.blank?
+      add_error I18n.t("open_ai_services.message_is_blank") if @message.blank?
     end
 
     def create_message

@@ -49,8 +49,8 @@ module OpenAIServices
     end
 
     def validate
-      add_error 'Thread ID is blank' if @thread_id.blank?
-      add_error 'Run ID is blank' if @run_id.blank?
+      add_error I18n.t("open_ai_services.thread_id_is_blank") if @thread_id.blank?
+      add_error I18n.t("open_ai_services.run_id_is_blank") if @run_id.blank?
     end
 
     def retrieve_run

@@ -23,8 +23,8 @@ module BotServices
     private
 
     def validate
-      add_error 'Message is blank' if @message.blank?
-      add_error 'User ID is blank' if @user_id.blank?
+      add_error I18n.t('bot_services.message_is_blank') if @message.blank?
+      add_error I18n.t('bot_services.user_id_is_blank') if @user_id.blank?
     end
 
     def handle_initialization
