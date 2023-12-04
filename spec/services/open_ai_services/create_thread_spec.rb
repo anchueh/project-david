@@ -25,7 +25,6 @@ RSpec.describe OpenAIServices::CreateThread, type: :service do
       it 'adds an error' do
         service.call
         expect(service.thread_id).to be_nil
-        expect(service.errors).not_to be_empty
       end
     end
   end

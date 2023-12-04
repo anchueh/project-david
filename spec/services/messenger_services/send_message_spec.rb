@@ -22,7 +22,8 @@ RSpec.describe MessengerServices::SendMessage, type: :service do
 
       it 'adds an error' do
         expect(service.call).to be(service)
-        expect(service.errors).to include(I18n.t('messenger_services.user_id_is_blank'))
+        expect(service.errors).to include(an_instance_of(StandardError))
+        expect(service.errors.first.message).to eq(I18n.t('messenger_services.user_id_is_blank'))
       end
     end
 
@@ -31,7 +32,8 @@ RSpec.describe MessengerServices::SendMessage, type: :service do
 
       it 'adds an error' do
         expect(service.call).to be(service)
-        expect(service.errors).to include(I18n.t('messenger_services.message_is_blank'))
+        expect(service.errors).to include(an_instance_of(StandardError))
+        expect(service.errors.first.message).to eq(I18n.t('messenger_services.message_is_blank'))
       end
     end
   end

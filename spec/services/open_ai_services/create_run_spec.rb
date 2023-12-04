@@ -25,7 +25,8 @@ RSpec.describe OpenAIServices::CreateRun, type: :service do
 
       it 'adds an error for missing thread_id' do
         expect(service.call).to be(service)
-        expect(service.errors).to include(I18n.t('open_ai_services.thread_id_is_blank'))
+        expect(service.errors).to include(an_instance_of(StandardError))
+        expect(service.errors.first.message).to eq(I18n.t('open_ai_services.thread_id_is_blank'))
       end
     end
 
@@ -35,7 +36,8 @@ RSpec.describe OpenAIServices::CreateRun, type: :service do
 
       it 'adds an error for missing assistant_id' do
         expect(service.call).to be(service)
-        expect(service.errors).to include(I18n.t('open_ai_services.assistant_id_is_blank'))
+        expect(service.errors).to include(an_instance_of(StandardError))
+        expect(service.errors.first.message).to eq(I18n.t('open_ai_services.assistant_id_is_blank'))
       end
     end
   end

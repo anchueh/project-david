@@ -31,9 +31,14 @@ module MessengerServices
       http.use_ssl = true
       request = Net::HTTP::Post.new(@uri.request_uri, 'Content-Type' => 'application/json')
       request.body = request_body.to_json
+      Rails.logger.info "Request URI: #{@uri}"
+      Rails.logger.info "Request Body: #{request.body}"
       @response = http.request(request)
+      Rails.logger.info "Response Code: #{response.code}"
+      Rails.logger.info "Response Body: #{response.body}"
     rescue StandardError => e
       add_error e.message
+      Rails.logger.error "HTTP Request failed: #{e.message}"
     end
 
     def request_body
@@ -46,6 +51,7 @@ module MessengerServices
     end
 
     def handle_response
+      puts "Response: #{@response}"
       unless @response.is_a?(Net::HTTPSuccess)
         add_error I18n.t('messenger_services.send_action_failed')
       end
